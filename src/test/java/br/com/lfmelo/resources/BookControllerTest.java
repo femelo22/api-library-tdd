@@ -1,5 +1,7 @@
 package br.com.lfmelo.resources;
 
+import br.com.lfmelo.dtos.BookDTO;
+import br.com.lfmelo.factors.BookFactoryTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,9 +34,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Deve criar um livro com sucesso.")
     public void createBookTest() throws Exception {
+        BookDTO dto = BookFactoryTest.buildBookDTO();
 
         //Recebe um objeto e transforma em Json
-        String json = new ObjectMapper().writeValueAsString(null);
+        String json = new ObjectMapper().writeValueAsString(dto);
 
         //Mockar uma requisição
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
@@ -48,9 +51,9 @@ public class BookControllerTest {
                 .perform(request)
                 .andExpect( status().isCreated() )
                 .andExpect( jsonPath("id").isNotEmpty()) //pegar uma propriedade da resposta
-                .andExpect( jsonPath("title").value("Meu Livro"))
-                .andExpect( jsonPath("author").value("Autor"))
-                .andExpect( jsonPath("isbn").value("123123123"));
+                .andExpect( jsonPath("title").value(dto.getTitle()))
+                .andExpect( jsonPath("author").value(dto.getAuthor()))
+                .andExpect( jsonPath("isbn").value(dto.getIsbn()));
     }
 
     @Test
