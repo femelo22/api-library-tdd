@@ -1,23 +1,20 @@
-package br.com.lfmelo.dtos;
+package br.com.lfmelo.entities;
 
-import br.com.lfmelo.entities.Book;
+import javax.persistence.Entity;
 
-public class BookDTO {
+@Entity(name = "TB_BOOK")
+public class Book {
 
     private Long id;
+
     private String title;
+
     private String author;
+
     private String isbn;
 
-    public BookDTO() {
+    public Book() {
 
-    }
-
-    public BookDTO(Book book) {
-        this.id = book.getId();
-        this.title = book.getTitle();
-        this.author = book.getAuthor();
-        this.isbn = book.getIsbn();
     }
 
     public Long getId() {

@@ -1,22 +1,29 @@
 package br.com.lfmelo.resources;
 
 import br.com.lfmelo.dtos.BookDTO;
+import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.factors.BookFactoryTest;
+import br.com.lfmelo.services.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static br.com.lfmelo.factors.BookFactoryTest.buildBookDTO;
+import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,10 +38,17 @@ public class BookControllerTest {
     @Autowired
     MockMvc mvc; //Ele vai simular as requisiçoes da nossa api
 
+    @MockBean // Mock para criar a instancia da nossa classe mockada, e colocar dentro do nosso contexto
+    BookService service;
+
     @Test
     @DisplayName("Deve criar um livro com sucesso.")
     public void createBookTest() throws Exception {
-        BookDTO dto = BookFactoryTest.buildBookDTO();
+        BookDTO dto = buildBookDTO();
+        Book savedBook = buildSavedBook();
+
+        //Mockar o servico de salvar a entidade, junto com o que a funcao vai retornar
+        BDDMockito.given(service.save(Mockito.any(Book.class))).willReturn(savedBook);
 
         //Recebe um objeto e transforma em Json
         String json = new ObjectMapper().writeValueAsString(dto);
