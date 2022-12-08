@@ -2,14 +2,12 @@ package br.com.lfmelo.resources;
 
 import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
-import br.com.lfmelo.factors.BookFactoryTest;
 import br.com.lfmelo.services.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
