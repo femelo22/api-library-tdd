@@ -21,4 +21,12 @@ public class BookFactoryTest {
         book.setIsbn("123456");
         return book;
     }
+
+    public static Book buildNewBook() {
+        Book book = new Book();
+        book.setAuthor("Autor Teste");
+        book.setTitle("Titulo Teste");
+        book.setIsbn("123456");
+        return book;
+    }
 }
