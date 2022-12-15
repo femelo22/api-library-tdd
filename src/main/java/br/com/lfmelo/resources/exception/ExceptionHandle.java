@@ -13,6 +13,7 @@ public class ExceptionHandle {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErros handlevalidationException(MethodArgumentNotValidException ex) {
+        System.out.println("passou aqui");
         BindingResult bindingResult = ex.getBindingResult(); // pega todas as mensagens de erros
         return new ApiErros(bindingResult);
     }

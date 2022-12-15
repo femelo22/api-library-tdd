@@ -2,6 +2,7 @@ package br.com.lfmelo.resources;
 
 import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
+import br.com.lfmelo.resources.exception.BusinessException;
 import br.com.lfmelo.services.BookService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,7 +72,7 @@ public class BookControllerTest {
                 .andExpect( jsonPath("isbn").value(dto.getIsbn()));
     }
 
-    @Test
+    @Test //validaçao de integridade do objeto
     @DisplayName("Deve lancar erro de validacao quando nao houver dados suficiente para criacao do livro.")
     public void createInvalidBookTest() throws Exception {
 
@@ -90,6 +91,29 @@ public class BookControllerTest {
     }
 
 
+    @Test
+    @DisplayName("Erro ao cadastrar livro com ISBN já existente")
+    public void createBookWithDuplicatedIsbn() throws Exception {
+        BookDTO dto = buildBookDTO();
+
+        String msgError = "Isbn already registered.";
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        //Simular que o servico mandou a mensagem de erro
+        BDDMockito.given(service.save(Mockito.any(Book.class))).willThrow(new BusinessException(msgError));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(BOOK_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc
+                .perform(request)
+                .andExpect( status().isBadRequest() )
+                .andExpect( jsonPath("errors", hasSize(1)))
+                .andExpect( jsonPath("errors[0]").value(msgError));
+    }
 
 
 }
