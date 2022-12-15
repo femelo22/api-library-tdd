@@ -3,7 +3,9 @@ package br.com.lfmelo.resources;
 import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.services.BookService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static br.com.lfmelo.factors.BookFactoryTest.buildBookDTO;
 import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,7 +73,22 @@ public class BookControllerTest {
 
     @Test
     @DisplayName("Deve lancar erro de validacao quando nao houver dados suficiente para criacao do livro.")
-    public void createInvalidBookTest() {
+    public void createInvalidBookTest() throws Exception {
+
+        String json = new ObjectMapper().writeValueAsString(new BookDTO());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(BOOK_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc
+                .perform(request)
+//                .andExpect( status().isBadRequest() )
+                .andExpect( jsonPath("id").isEmpty())
+                .andExpect( jsonPath("title").isEmpty())
+                .andExpect( jsonPath("author").isEmpty());
 
     }
 

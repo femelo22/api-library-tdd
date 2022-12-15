@@ -2,11 +2,16 @@ package br.com.lfmelo.resources;
 
 import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
+import br.com.lfmelo.resources.exception.ApiErros;
 import br.com.lfmelo.services.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/books")
@@ -20,9 +25,17 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookDTO create(@RequestBody BookDTO dto) {
+    public BookDTO create(@RequestBody @Valid BookDTO dto) {
         Book entity = modelMapper.map(dto, Book.class);
         entity = service.save(entity);
-        return new BookDTO(entity);
+         return dto;
     }
+
+
+//    @ExceptionHandler(MethodArgumentNotValidException.class) // exception do @Valid (validation)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ApiErros handlevalidationException(MethodArgumentNotValidException ex) {
+//        BindingResult bindingResult = ex.getBindingResult(); // pega todas as mensagens de erros
+//        return new ApiErros(bindingResult);
+//    }
 }
