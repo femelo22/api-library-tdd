@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class ApiLibraryApplication {
 
+	//TODO: PADRONIZAR OS COMENTÁRIOS NO TOPO DA CLASSE, SEGUIR DO EXEMPLO BOOKREPOSITORYTEST
+
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
