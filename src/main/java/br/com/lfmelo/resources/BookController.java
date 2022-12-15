@@ -29,7 +29,7 @@ public class BookController {
     public BookDTO create(@RequestBody @Valid BookDTO dto) {
         Book entity = modelMapper.map(dto, Book.class);
         entity = service.save(entity);
-         return dto;
+        return modelMapper.map(entity, BookDTO.class);
     }
 
 
