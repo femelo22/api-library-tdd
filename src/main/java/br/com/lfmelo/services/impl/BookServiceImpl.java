@@ -6,6 +6,8 @@ import br.com.lfmelo.resources.exception.BusinessException;
 import br.com.lfmelo.services.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -25,5 +27,10 @@ public class BookServiceImpl implements BookService {
             throw new BusinessException("Isbn already registered.");
         }
         return repository.save(book);
+    }
+
+    @Override
+    public Optional<Book> getById(Long id) {
+        return Optional.empty();
     }
 }
