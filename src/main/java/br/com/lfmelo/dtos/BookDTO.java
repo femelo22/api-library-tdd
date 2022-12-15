@@ -4,17 +4,18 @@ import br.com.lfmelo.entities.Book;
 
 import javax.validation.constraints.NotEmpty;
 
+
 public class BookDTO {
 
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "Title cannot be null")
     private String title;
 
-    @NotEmpty
+    @NotEmpty(message = "Author cannot be null")
     private String author;
 
-    @NotEmpty
+    @NotEmpty(message = "ISBN cannot be null")
     private String isbn;
 
     public BookDTO() {

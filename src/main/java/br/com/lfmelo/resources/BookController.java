@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -32,10 +33,10 @@ public class BookController {
     }
 
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class) // exception do @Valid (validation)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ApiErros handlevalidationException(MethodArgumentNotValidException ex) {
-//        BindingResult bindingResult = ex.getBindingResult(); // pega todas as mensagens de erros
-//        return new ApiErros(bindingResult);
-//    }
+    @ExceptionHandler(MethodArgumentNotValidException.class) // exception do @Valid (validation)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErros handlevalidationException(MethodArgumentNotValidException ex) {
+        BindingResult bindingResult = ex.getBindingResult(); // pega todas as mensagens de erros
+        return new ApiErros(bindingResult);
+    }
 }

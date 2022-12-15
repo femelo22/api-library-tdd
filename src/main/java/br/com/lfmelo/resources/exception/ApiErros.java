@@ -12,6 +12,7 @@ public class ApiErros {
     public ApiErros(BindingResult bindingResult) {
         this.errors = new ArrayList<>();
         bindingResult.getAllErrors().forEach(error -> {
+            System.out.println(error);
             this.errors.add(error.getDefaultMessage());
         });
     }

@@ -85,11 +85,14 @@ public class BookControllerTest {
 
         mvc
                 .perform(request)
-//                .andExpect( status().isBadRequest() )
+                .andExpect( status().isBadRequest() )
                 .andExpect( jsonPath("id").isEmpty())
                 .andExpect( jsonPath("title").isEmpty())
                 .andExpect( jsonPath("author").isEmpty());
 
     }
+
+
+
 
 }
