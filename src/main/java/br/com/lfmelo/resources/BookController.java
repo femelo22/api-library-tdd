@@ -38,19 +38,4 @@ public class BookController {
         Book book = service.getById(id).get();
         return modelMapper.map(book, BookDTO.class);
     }
-
-
-    //TODO: SEPARAR LANCAMENTO DE EXCECAO
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErros handleValidationException(MethodArgumentNotValidException ex) {
-        BindingResult bindingResult = ex.getBindingResult(); // pega todas as mensagens de erros
-        return new ApiErros(bindingResult);
-    }
-
-    @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErros handleBusinessException(BusinessException ex) {
-        return new ApiErros(ex);
-    }
 }
