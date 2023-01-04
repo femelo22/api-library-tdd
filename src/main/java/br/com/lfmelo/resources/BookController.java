@@ -2,17 +2,14 @@ package br.com.lfmelo.resources;
 
 import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
-import br.com.lfmelo.resources.exception.ApiErros;
-import br.com.lfmelo.resources.exception.BusinessException;
 import br.com.lfmelo.services.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 @RestController
@@ -35,7 +32,14 @@ public class BookController {
 
     @GetMapping("/{id}")
     public BookDTO get(@PathVariable Long id) {
-        Book book = service.getById(id).get();
+        Book book = service.getById(id);
         return modelMapper.map(book, BookDTO.class);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable Long id) {
+        Book book = service.getById(id);
+        service.delete(book);
     }
 }

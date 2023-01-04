@@ -3,6 +3,7 @@ package br.com.lfmelo.services.impl;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.repositories.BookRepository;
 import br.com.lfmelo.resources.exception.BusinessException;
+import br.com.lfmelo.resources.exception.NotFoundException;
 import br.com.lfmelo.services.BookService;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> getById(Long id) {
-        return Optional.empty();
+    public Book getById(Long id) {
+        return repository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("User not found."));
+
+    }
+
+    @Override
+    public void delete(Book book) {
+
     }
 }
