@@ -3,14 +3,12 @@ package br.com.lfmelo.resources;
 import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.resources.exception.BusinessException;
-import br.com.lfmelo.resources.exception.NotFoundException;
 import br.com.lfmelo.services.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,8 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Optional;
 
 import static br.com.lfmelo.factors.BookFactoryTest.*;
 import static org.hamcrest.Matchers.*;
@@ -184,6 +180,46 @@ public class BookControllerTest {
         mvc
                 .perform(request)
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve atualizar livro")
+    public void updateBookTest() throws Exception {
+        Long id = 1l;
+        BookDTO dto = buildBookDTO();
+        Book updateBook = buildUpdateBook();
+        BDDMockito.given(service.getById(id)).willReturn(updateBook);
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(BOOK_API.concat("/" + 1))
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc
+                .perform(request)
+                .andExpect( status().isOk() )
+                .andExpect( jsonPath("id").value(id)) //pegar uma propriedade da resposta
+                .andExpect( jsonPath("title").value(dto.getTitle()))
+                .andExpect( jsonPath("author").value(dto.getAuthor()))
+                .andExpect( jsonPath("isbn").value(dto.getIsbn()));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 ao tentar atualizar livro inexistente")
+    public void updateInexistentBook() throws Exception {
+        BookDTO dto = buildBookDTO();
+        BDDMockito.given(service.getById(1l)).willReturn(null);
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(BOOK_API.concat("/" + 1))
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc
+                .perform(request)
+                .andExpect( status().isNotFound() );
     }
 
 

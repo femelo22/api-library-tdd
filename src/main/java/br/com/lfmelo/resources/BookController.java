@@ -42,4 +42,10 @@ public class BookController {
         Book book = service.getById(id);
         service.delete(book);
     }
+
+    @PutMapping("/{id}")
+    public void updateBook(@PathVariable Long id, @RequestBody BookDTO dto) {
+        Book book = service.getById(id);
+
+    }
 }

@@ -29,4 +29,12 @@ public class BookFactoryTest {
         book.setIsbn("123456");
         return book;
     }
+
+    public static Book buildUpdateBook() {
+        Book book = new Book();
+        book.setAuthor("Autor");
+        book.setTitle("Titulo");
+        book.setIsbn("321");
+        return book;
+    }
 }
