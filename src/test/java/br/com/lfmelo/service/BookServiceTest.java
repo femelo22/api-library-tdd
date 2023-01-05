@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -22,6 +23,7 @@ import java.util.Optional;
 import static br.com.lfmelo.factors.BookFactoryTest.buildNewBook;
 import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -110,5 +112,17 @@ public class BookServiceTest {
                 .hasMessage("User not found.");
     }
 
+    @Test
+    @DisplayName("Deve deletar livro")
+    public void deleteBook() {
+        //cenario
+        Book book = buildSavedBook();
+
+        //execucao
+        assertDoesNotThrow(() -> service.delete(book)); //Gatantir que não deu nenhum erro (import do JUPTER)
+
+        //validacao
+        Mockito.verify(repository, Mockito.times(1)).delete(book);
+    }
 
 }
