@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 import static br.com.lfmelo.factors.BookFactoryTest.buildNewBook;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,7 +39,7 @@ public class BookRepositoryTest {
 
 
     @Test
-    @DisplayName("Deve retornar true quando existir libre já cadastrado")
+    @DisplayName("Deve retornar true quando existir livro já cadastrado")
     public void returnTrueWhenIsbnExists() {
         //cenario
         String isbn = "123";
@@ -53,7 +55,7 @@ public class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("Deve retornar false quando existir libre já cadastrado")
+    @DisplayName("Deve retornar false quando existir livro já cadastrado")
     public void returnFalseWhenIsbnExists() {
         //cenario
         String isbn = "123";
@@ -64,4 +66,17 @@ public class BookRepositoryTest {
         //validacao
         assertThat(exists).isFalse();
     }
+
+    @Test
+    @DisplayName("Deve retornar livro por ID")
+    public void returnBookById() {
+        Long id = 1l;
+        Book book = buildNewBook();
+        entityManager.persist(book);
+
+        Optional<Book> bookSaved = repository.findById(id);
+
+        assertThat(bookSaved.isPresent()).isTrue();
+    }
+
 }
