@@ -3,6 +3,7 @@ package br.com.lfmelo.resources;
 import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.resources.exception.BusinessException;
+import br.com.lfmelo.resources.exception.NotFoundException;
 import br.com.lfmelo.services.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -142,7 +143,7 @@ public class BookControllerTest {
         String msgError = "User not found.";
         Book book = buildSavedBook();
 
-        BDDMockito.given( service.getById(1l)).willReturn(Mockito.any());
+        BDDMockito.given(service.getById(1l)).willThrow(new NotFoundException(msgError));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(BOOK_API.concat("/" + 1))

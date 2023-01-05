@@ -36,6 +36,6 @@ public class ExceptionHandle {
 
         ApiErros apiErros = new ApiErros(ex);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiErros);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErros);
     }
 }
