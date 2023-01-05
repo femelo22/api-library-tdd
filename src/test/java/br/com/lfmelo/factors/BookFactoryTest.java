@@ -32,6 +32,7 @@ public class BookFactoryTest {
 
     public static Book buildUpdateBook() {
         Book book = new Book();
+        book.setId(1l);
         book.setAuthor("Autor");
         book.setTitle("Titulo");
         book.setIsbn("321");

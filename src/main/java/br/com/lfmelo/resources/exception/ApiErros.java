@@ -1,5 +1,6 @@
 package br.com.lfmelo.resources.exception;
 
+import org.aspectj.weaver.ast.Not;
 import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
@@ -18,6 +19,10 @@ public class ApiErros {
     }
 
     public ApiErros(BusinessException ex) {
+        this.errors = Arrays.asList(ex.getMessage());
+    }
+
+    public ApiErros(NotFoundException ex) {
         this.errors = Arrays.asList(ex.getMessage());
     }
 

@@ -1,10 +1,13 @@
 package br.com.lfmelo.services.impl;
 
+import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.repositories.BookRepository;
 import br.com.lfmelo.resources.exception.BusinessException;
 import br.com.lfmelo.resources.exception.NotFoundException;
 import br.com.lfmelo.services.BookService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,6 +24,9 @@ public class BookServiceImpl implements BookService {
     public BookServiceImpl(BookRepository repository) {
         this.repository = repository;
     }
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public Book save(Book book) {
@@ -39,6 +45,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void delete(Book book) {
+        repository.delete(book);
+    }
 
+    @Override
+    public Book update(Long id, BookDTO dto) {
+        Book book = getById(id);
+        book.setId(id);
+        book.setAuthor(dto.getAuthor());
+        book.setTitle(dto.getTitle());
+        repository.save(book);
+        return book;
     }
 }

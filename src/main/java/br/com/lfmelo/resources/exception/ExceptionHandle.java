@@ -30,4 +30,12 @@ public class ExceptionHandle {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiErros);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiErros> handleBusinessException(NotFoundException ex) {
+
+        ApiErros apiErros = new ApiErros(ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiErros);
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 
 @RestController
@@ -44,8 +43,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public void updateBook(@PathVariable Long id, @RequestBody BookDTO dto) {
-        Book book = service.getById(id);
-
+    @ResponseStatus(HttpStatus.OK)
+    public Book updateBook(@PathVariable Long id, @RequestBody BookDTO dto) {
+        return service.update(id, dto);
     }
 }
