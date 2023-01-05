@@ -3,6 +3,7 @@ package br.com.lfmelo.service;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.repositories.BookRepository;
 import br.com.lfmelo.resources.exception.BusinessException;
+import br.com.lfmelo.resources.exception.NotFoundException;
 import br.com.lfmelo.services.impl.BookServiceImpl;
 import br.com.lfmelo.services.BookService;
 import org.assertj.core.api.Assertions;
@@ -10,10 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
 
 import static br.com.lfmelo.factors.BookFactoryTest.buildNewBook;
 import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
@@ -69,4 +73,42 @@ public class BookServiceTest {
 
         Mockito.verify(repository, Mockito.never()).save(book); //validar que nao chamou o save do repository  ?? existe outras variantes interessantes do Mockito.never()
     }
+
+
+    @Test
+    @DisplayName("Deve retornar um livro por ID")
+    public void getById() {
+        //cenario
+        Long id = 1l;
+        Book book = buildSavedBook();
+        Mockito.when( repository.findById(id) ).thenReturn(Optional.of(book));
+
+        //execucao
+        Book bookSaved = service.getById(id);
+
+        //validacao
+        assertThat(bookSaved.getId()).isEqualTo(id);
+        assertThat(bookSaved.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(bookSaved.getTitle()).isEqualTo(book.getTitle());
+        assertThat(bookSaved.getIsbn()).isEqualTo(book.getIsbn());
+    }
+
+    @Test
+    @DisplayName("Deve retornar NotFound ao obter um livro por ID inexistente")
+    public void bookNotFoundById() {
+        //cenario
+        Long id = 1l;
+        Mockito.when( repository.findById(id) ).thenReturn(Optional.empty());
+
+        //execucao
+        Throwable exception = Assertions
+                .catchThrowable(() -> service.getById(id));
+
+        //verificacao
+        assertThat(exception)
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("User not found.");
+    }
+
+
 }
