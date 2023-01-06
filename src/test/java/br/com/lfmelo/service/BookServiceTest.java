@@ -20,8 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
-import static br.com.lfmelo.factors.BookFactoryTest.buildNewBook;
-import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
+import static br.com.lfmelo.factors.BookFactoryTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -81,7 +80,7 @@ public class BookServiceTest {
     @DisplayName("Deve retornar um livro por ID")
     public void getById() {
         //cenario
-        Long id = 1l;
+        long id = 1l;
         Book book = buildSavedBook();
         Mockito.when( repository.findById(id) ).thenReturn(Optional.of(book));
 
@@ -99,7 +98,7 @@ public class BookServiceTest {
     @DisplayName("Deve retornar NotFound ao obter um livro por ID inexistente")
     public void bookNotFoundById() {
         //cenario
-        Long id = 1l;
+        long id = 1l;
         Mockito.when( repository.findById(id) ).thenReturn(Optional.empty());
 
         //execucao
@@ -123,6 +122,44 @@ public class BookServiceTest {
 
         //validacao
         Mockito.verify(repository, Mockito.times(1)).delete(book);
+    }
+
+
+    @Test
+    @DisplayName("Deve ocorrer erro ao deletar livro inexistente")
+    public void invalidDeleteBook() {
+        //cenario
+        Book book = new Book();
+
+        //execucao
+         org.junit.jupiter.api.Assertions.assertThrows(BusinessException.class, () -> service.delete(book)); //Gatantir que não deu nenhum erro (import do JUPTER)
+
+        //validacao
+        Mockito.verify(repository, Mockito.never()).delete(book);
+    }
+
+
+    @Test
+    @DisplayName("Deve atualizar um livro")
+    public void updateBook() {
+        //cenario
+        long id = 1l;
+        Book savedBook = buildSavedBook();
+        Book updatedBook = buildUpdateBook();
+        updatedBook.setId(id);
+
+        Mockito.when( repository.findById(id) ).thenReturn(Optional.of(savedBook));
+        Mockito.when( service.save(savedBook) ).thenReturn(updatedBook);
+
+        //execucao
+        Book book = service.update(id, buildBookDTO());
+
+
+        //verificacao
+        assertThat(book.getId()).isEqualTo(savedBook.getId());
+        assertThat(book.getAuthor()).isEqualTo(savedBook.getAuthor());
+        assertThat(book.getTitle()).isEqualTo(savedBook.getTitle());
+        assertThat(book.getIsbn()).isEqualTo(savedBook.getIsbn());
     }
 
 }
