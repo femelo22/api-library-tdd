@@ -39,6 +39,16 @@ public class BookRepositoryTest {
 
 
     @Test
+    @DisplayName("Deve salvar um livro")
+    public void saveBook() {
+        Book book = buildNewBook();
+
+        Book savedBook = repository.save(book);
+
+        assertThat(savedBook.getId()).isNotNull();
+    }
+
+    @Test
     @DisplayName("Deve retornar true quando existir livro já cadastrado")
     public void returnTrueWhenIsbnExists() {
         //cenario
@@ -77,6 +87,21 @@ public class BookRepositoryTest {
         Optional<Book> bookSaved = repository.findById(id);
 
         assertThat(bookSaved.isPresent()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve deletar um livro")
+    public void deleteBook() {
+        //cenario
+        Book book = buildNewBook();
+        entityManager.persist(book); //primeiro temos que salvar um livro na base
+
+        Book foundBook = entityManager.find(Book.class, book.getId()); //buscar o livro por id
+
+        repository.delete(foundBook); //deletar o livro
+
+        Book deletedBook = entityManager.find(Book.class, book.getId()); // tentar buscar novamente (Como foi deletado, não deve existir mais)
+        assertThat(deletedBook).isNull(); //validação que não achou o livro na base
     }
 
 }
