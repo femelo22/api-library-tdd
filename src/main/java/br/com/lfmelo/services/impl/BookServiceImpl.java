@@ -8,6 +8,8 @@ import br.com.lfmelo.resources.exception.NotFoundException;
 import br.com.lfmelo.services.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -59,5 +61,10 @@ public class BookServiceImpl implements BookService {
         book.setTitle(dto.getTitle());
         repository.save(book);
         return book;
+    }
+
+    @Override
+    public Page<Book> findAll(Pageable pageable) {
+        return null;
     }
 }
