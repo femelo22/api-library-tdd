@@ -108,7 +108,7 @@ public class BookServiceTest {
         //verificacao
         assertThat(exception)
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("User not found.");
+                .hasMessage("Book not found.");
     }
 
     @Test

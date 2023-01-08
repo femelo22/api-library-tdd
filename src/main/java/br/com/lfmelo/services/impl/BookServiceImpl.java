@@ -41,7 +41,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getById(Long id) {
         return repository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("User not found."));
+                        .orElseThrow(() -> new NotFoundException("Book not found."));
 
     }
 

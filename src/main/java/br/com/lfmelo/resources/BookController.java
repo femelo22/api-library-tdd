@@ -5,6 +5,8 @@ import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.services.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,5 +48,9 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public Book updateBook(@PathVariable Long id, @RequestBody BookDTO dto) {
         return service.update(id, dto);
+    }
+
+    public Page<Book> findPagination(Pageable pageRequest) {
+        return service.findAll(pageRequest);
     }
 }
