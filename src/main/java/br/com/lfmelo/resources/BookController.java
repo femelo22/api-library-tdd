@@ -6,11 +6,14 @@ import br.com.lfmelo.services.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -50,7 +53,14 @@ public class BookController {
         return service.update(id, dto);
     }
 
-    public Page<Book> findPagination(Pageable pageRequest) {
-        return service.findAll(pageRequest);
-    }
+//    @GetMapping
+//    public Page<Book> findPagination(Pageable pageRequest) {
+//        Page<Book> result = service.findAll(pageRequest);
+//        List<Book> list = result.getContent()
+//                .stream()
+//                .map( book -> modelMapper.map(book, Book.class))
+//                .collect(Collectors.toList());
+//
+//        return new PageImpl<Book>( list, pageRequest, result.getTotalElements() );
+//    }
 }

@@ -3,6 +3,9 @@ package br.com.lfmelo.factors;
 import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BookFactoryTest {
 
     public static BookDTO buildBookDTO() {
@@ -37,5 +40,13 @@ public class BookFactoryTest {
         book.setTitle("Titulo");
         book.setIsbn("321");
         return book;
+    }
+
+    public static List<Book> buildSavedBooksList() {
+        Book book1 = buildSavedBook();
+        Book book2 = buildSavedBook();
+        Book book3 = buildSavedBook();
+
+        return Arrays.asList(book1, book2, book3);
     }
 }
