@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class) //cria um contexto de injeçao de dependencia
 @ActiveProfiles("test") //rodar no perfil de test
-@WebMvcTest
+@WebMvcTest(controllers = BookController.class) //Como temos mais que um controller, deixamos claro para ele rodar o BookController
 @AutoConfigureMockMvc //O Spring configura um objeto pra fazermos as requisiçoes
 public class BookResourceTest {
 
