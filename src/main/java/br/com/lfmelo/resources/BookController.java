@@ -5,15 +5,12 @@ import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.services.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -63,4 +60,10 @@ public class BookController {
 //
 //        return new PageImpl<Book>( list, pageRequest, result.getTotalElements() );
 //    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Book> findAllBooks() {
+        return service.findAll();
+    }
 }

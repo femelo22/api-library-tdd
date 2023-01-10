@@ -255,9 +255,4 @@ public class BookResourceTest {
 //                .andExpect( jsonPath("pageble.pageSize").value(100))
 //                .andExpect( jsonPath("pageble.pageNumber").value(0));
 //    }
-
-
-
-
-
 }
