@@ -1,6 +1,5 @@
 package br.com.lfmelo.service;
 
-import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.repositories.BookRepository;
 import br.com.lfmelo.resources.exception.BusinessException;
@@ -12,18 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static br.com.lfmelo.factors.BookFactoryTest.*;

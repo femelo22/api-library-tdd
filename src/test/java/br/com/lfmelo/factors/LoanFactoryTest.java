@@ -21,6 +21,16 @@ public class LoanFactoryTest {
         return loan;
     }
 
+    public static Loan buildLoanWithoutID() {
+        Book book = buildSavedBook();
+        Loan loan = new Loan();
+        loan.setBook(book);
+        loan.setCustomer("Luiz Fernando");
+        loan.setReturned(false);
+        loan.setLoanDate(LocalDate.now());
+        return loan;
+    }
+
     public static LoanDTO buildLoanDTO() {
         return new LoanDTO("123", "Luiz Fernando");
     }
