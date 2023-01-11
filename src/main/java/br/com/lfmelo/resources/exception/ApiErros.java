@@ -2,6 +2,7 @@ package br.com.lfmelo.resources.exception;
 
 import org.aspectj.weaver.ast.Not;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

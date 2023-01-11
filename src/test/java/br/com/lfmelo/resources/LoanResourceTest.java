@@ -3,9 +3,11 @@ package br.com.lfmelo.resources;
 
 import br.com.lfmelo.dtos.LoanDTO;
 import br.com.lfmelo.entities.Loan;
+import br.com.lfmelo.resources.exception.BusinessException;
 import br.com.lfmelo.services.BookService;
 import br.com.lfmelo.services.LoanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +29,7 @@ import java.util.Optional;
 import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
 import static br.com.lfmelo.factors.LoanFactoryTest.buildLoan;
 import static br.com.lfmelo.factors.LoanFactoryTest.buildLoanDTO;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -69,7 +70,58 @@ public class LoanResourceTest {
         mvc
                 .perform(request)
                 .andExpect( status().isCreated() )
-                .andExpect(jsonPath("id").value(1l));
-
+                .andExpect( content().string("1")); // Quando o retorno não é um json, usamos o content(). MockMvcResultMatchers
     }
+
+
+
+    @Test
+    @DisplayName("Deve retornar excecao para ISBN nao encontrdo ao realizar um emprestimo")
+    public void invalidIsbnCreatedLoan() throws Exception {
+        //cenario
+        String msgError = "Book not found for passed isbn.";
+        LoanDTO dto = buildLoanDTO();
+        String json = new ObjectMapper().writeValueAsString(dto);
+        BDDMockito.given( bookService.getBookByIsbn(dto.getIsbn()) ).willReturn( Optional.empty() );
+
+        //execucao
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(LOAN_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        //validacao
+        mvc
+                .perform(request)
+                .andExpect( status().isBadRequest() )
+                .andExpect( jsonPath("errors", Matchers.hasSize(1)))
+                .andExpect( jsonPath("errors[0]").value(msgError));
+    }
+
+    @Test
+    @DisplayName("Deve retornar excecao para livro ja emprestado")
+    public void bookAlreadyLoaned() throws Exception {
+        //cenario
+        String msgError = "Book already loaned";
+        LoanDTO dto = buildLoanDTO();
+        String json = new ObjectMapper().writeValueAsString(dto);
+        BDDMockito.given( bookService.getBookByIsbn("123") ).willReturn(Optional.of(buildSavedBook()));
+        BDDMockito.given( service.save(Mockito.any(Loan.class))).willThrow(new BusinessException(msgError));
+
+        //execucao
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(LOAN_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        //validacao
+        mvc
+                .perform(request)
+                .andExpect( status().isBadRequest() )
+                .andExpect( jsonPath("errors", Matchers.hasSize(1)))
+                .andExpect( jsonPath("errors[0]").value(msgError));
+    }
+
 }
