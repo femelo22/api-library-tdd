@@ -1,5 +1,6 @@
 package br.com.lfmelo.service;
 
+import br.com.lfmelo.dtos.BookDTO;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.repositories.BookRepository;
 import br.com.lfmelo.resources.exception.BusinessException;
@@ -28,6 +29,7 @@ import java.util.Optional;
 import static br.com.lfmelo.factors.BookFactoryTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -126,7 +128,7 @@ public class BookServiceTest {
         assertDoesNotThrow(() -> service.delete(book)); //Gatantir que não deu nenhum erro (import do JUPTER)
 
         //validacao
-        Mockito.verify(repository, Mockito.times(1)).delete(book);
+        Mockito.verify(repository, times(1)).delete(book);
     }
 
 
@@ -183,5 +185,21 @@ public class BookServiceTest {
 //
 //        Page<Book> result = service.findAll(pageRequest);
 //    }
+
+
+    @Test
+    @DisplayName("Deve retornar um livro por isbn.")
+    public void shouldReturnBookByIsbn() {
+        String isbn = "123456";
+        Mockito.when( repository.findByIsbn(isbn)).thenReturn(Optional.of(buildSavedBook()));
+
+        Optional<Book> book = service.getBookByIsbn(isbn);
+
+        assertThat(book.isPresent()).isTrue();
+        assertThat(book.get().getId()).isEqualTo(1l);
+        assertThat(book.get().getIsbn()).isEqualTo(isbn);
+
+        Mockito.verify( repository, times(1)).findByIsbn(isbn);
+    }
 
 }
