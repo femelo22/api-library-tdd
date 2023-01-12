@@ -40,7 +40,7 @@ public class LoanServiceTest {
     @DisplayName("Deve salvar um emprestimo")
     public void saveLoanTest() {
         Loan loan = buildLoan();
-        when(repository.existsByBookAndNotReturned(loan.getBook())).thenReturn(false);
+        when( repository.existsByBookAndNotReturned(loan.getBook()) ).thenReturn(false);
         when( repository.save(any(Loan.class))).thenReturn(loan);
 
         Loan savedLoan = service.save(loan);
@@ -57,7 +57,7 @@ public class LoanServiceTest {
     public void loadedBookTest() {
         Loan loan = buildLoan();
         String msgError = "Book already loaned";
-        when(repository.existsByBookAndNotReturned(loan.getBook())).thenReturn(true);
+        when( repository.existsByBookAndNotReturned(loan.getBook()) ).thenReturn(true);
 
         Throwable exception = catchThrowable(() -> service.save(loan));
 
