@@ -1,6 +1,7 @@
 package br.com.lfmelo.resources;
 
 import br.com.lfmelo.dtos.LoanDTO;
+import br.com.lfmelo.dtos.ReturnedLoanDTO;
 import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.entities.Loan;
 import br.com.lfmelo.resources.exception.BusinessException;
@@ -37,6 +38,16 @@ public class LoanResource {
         loan = loanService.save(loan);
 
         return loan.getId();
+    }
+
+
+    @PatchMapping("/{id}")
+    public void returnedBook(
+            @PathVariable Long id,
+            @RequestBody ReturnedLoanDTO dto) {
+        Loan loan = loanService.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        loan.setReturned(dto.getReturned());
+        loanService.update(loan);
     }
 
 }

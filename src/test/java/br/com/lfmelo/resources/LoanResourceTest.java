@@ -2,6 +2,7 @@ package br.com.lfmelo.resources;
 
 
 import br.com.lfmelo.dtos.LoanDTO;
+import br.com.lfmelo.dtos.ReturnedLoanDTO;
 import br.com.lfmelo.entities.Loan;
 import br.com.lfmelo.resources.exception.BusinessException;
 import br.com.lfmelo.services.BookService;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -122,6 +124,53 @@ public class LoanResourceTest {
                 .andExpect( status().isBadRequest() )
                 .andExpect( jsonPath("errors", Matchers.hasSize(1)))
                 .andExpect( jsonPath("errors[0]").value(msgError));
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um livro")
+    public void returnBookTest() throws Exception {
+
+        //cenario
+        Loan loan = buildLoan();
+        ReturnedLoanDTO dto = new ReturnedLoanDTO(true);
+        String json = new ObjectMapper().writeValueAsString(dto);
+        BDDMockito.given( service.getById(1l)).willReturn(Optional.of(loan));
+
+        //execucao
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .patch(LOAN_API.concat("/1"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        //validacao
+        mvc.perform(request)
+                .andExpect( status().isOk() );
+
+        Mockito.verify( service, Mockito.times(1)).update(loan);
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar 400 quando tentar devolver um livro inexistente.")
+    public void returnNonExistentBookTest() throws Exception {
+
+        //cenario
+        ReturnedLoanDTO dto = new ReturnedLoanDTO(true);
+        String json = new ObjectMapper().writeValueAsString(dto);
+        BDDMockito.given( service.getById(1l)).willReturn(Optional.empty());
+
+        //execucao
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .patch(LOAN_API.concat("/1"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        //validacao
+        mvc.perform(request)
+                .andExpect( status().isNotFound() );
     }
 
 }

@@ -7,6 +7,8 @@ import br.com.lfmelo.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class LoanServiceImpl implements LoanService {
 
@@ -24,5 +26,15 @@ public class LoanServiceImpl implements LoanService {
         }
 
         return repository.save(loan);
+    }
+
+    @Override
+    public Optional<Loan> getById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Loan update(Loan loan) {
+        return null;
     }
 }
