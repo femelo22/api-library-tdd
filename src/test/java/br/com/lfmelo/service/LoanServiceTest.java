@@ -10,10 +10,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
 
 import static br.com.lfmelo.factors.LoanFactoryTest.buildLoan;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,5 +69,23 @@ public class LoanServiceTest {
                 .hasMessage(msgError);
 
         Mockito.verify( repository, Mockito.never() ).save(loan);
+    }
+
+
+    @Test
+    @DisplayName("Deve obter as informacoes de um emprestimo pelo ID")
+    public void returnLoanById() {
+        Loan loan = buildLoan();
+        Mockito.when( repository.findById(1l) ).thenReturn(Optional.of(loan));
+
+        Optional<Loan> result = service.getById(1l);
+
+        assertThat(result.isPresent()).isTrue();
+        assertThat(result.get().getId()).isEqualTo(1l);
+        assertThat(result.get().getCustomer()).isEqualTo(loan.getCustomer());
+        assertThat(result.get().getBook()).isEqualTo(loan.getBook());
+        assertThat(result.get().getLoanDate()).isEqualTo(loan.getLoanDate());
+
+        Mockito.verify( repository ).findById(1l);
     }
 }
