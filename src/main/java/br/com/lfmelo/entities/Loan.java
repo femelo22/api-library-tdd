@@ -1,24 +1,26 @@
 package br.com.lfmelo.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
-//@Entity(name = "TB_LOANS")
+@Entity(name = "TB_LOANS")
 public class Loan {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100)
     private String customer;
 
+    @JoinColumn
+    @ManyToOne
     private Book book;
 
+    @Column
     private LocalDate loanDate;
 
+    @Column
     private Boolean returned;
 
     public Loan() {
