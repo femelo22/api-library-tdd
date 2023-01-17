@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/loans")
@@ -48,6 +49,11 @@ public class LoanResource {
         Loan loan = loanService.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         loan.setReturned(dto.getReturned());
         loanService.update(loan);
+    }
+
+    @GetMapping
+    public List<Loan> findAll() {
+        return loanService.findAll();
     }
 
 }

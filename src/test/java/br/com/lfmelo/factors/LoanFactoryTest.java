@@ -5,6 +5,8 @@ import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.entities.Loan;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
 
@@ -33,5 +35,9 @@ public class LoanFactoryTest {
 
     public static LoanDTO buildLoanDTO() {
         return new LoanDTO("123", "Luiz Fernando");
+    }
+
+    public static List<Loan> buildLoanList() {
+        return Arrays.asList(buildLoan(), buildLoan());
     }
 }

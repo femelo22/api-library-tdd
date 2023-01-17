@@ -8,6 +8,7 @@ import br.com.lfmelo.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,11 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Loan update(Loan loan) {
-        return null;
+        return repository.save(loan);
+    }
+
+    @Override
+    public List<Loan> findAll() {
+        return repository.findAll();
     }
 }

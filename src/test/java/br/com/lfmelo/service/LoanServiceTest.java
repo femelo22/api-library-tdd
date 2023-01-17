@@ -22,6 +22,7 @@ import static br.com.lfmelo.factors.LoanFactoryTest.buildLoan;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -87,5 +88,20 @@ public class LoanServiceTest {
         assertThat(result.get().getLoanDate()).isEqualTo(loan.getLoanDate());
 
         Mockito.verify( repository ).findById(1l);
+    }
+
+
+    @Test
+    @DisplayName("Deve atualizar um emprestimo")
+    public void updateLoanTest() {
+        Loan loan = buildLoan();
+        loan.setReturned(true);
+
+        Mockito.when( repository.save(loan) ).thenReturn(loan);
+
+        Loan updatedLoan = service.update(loan);
+
+        assertThat( updatedLoan.getReturned() ).isTrue();
+        verify( repository ).save(loan);
     }
 }

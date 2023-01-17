@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
-    @Query(" select case when (count(l.id) > 0 ) then true else end " +
-            " from Loan l where l.book = :book and ( l.returned is null or l.returned is false ) ")
+    @Query(value = " select case when (count(l.id) > 0 ) then true else end " +
+            " from Loan l where l.book = :book and ( l.returned is null or l.returned is false ) ", nativeQuery = true)
     boolean existsByBookAndNotReturned(@Param("book") Book book);
 }

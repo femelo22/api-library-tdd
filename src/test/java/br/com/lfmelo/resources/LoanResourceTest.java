@@ -26,11 +26,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
 import java.util.Optional;
 
 import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
-import static br.com.lfmelo.factors.LoanFactoryTest.buildLoan;
-import static br.com.lfmelo.factors.LoanFactoryTest.buildLoanDTO;
+import static br.com.lfmelo.factors.LoanFactoryTest.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
@@ -171,6 +171,23 @@ public class LoanResourceTest {
         //validacao
         mvc.perform(request)
                 .andExpect( status().isNotFound() );
+    }
+
+    @Test
+    @DisplayName("Deve retornar todos os emprestimos")
+    public void returnLoans() throws Exception {
+
+        List<Loan> loans = buildLoanList();
+        BDDMockito.given( service.findAll() ).willReturn(loans);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(LOAN_API)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc
+                .perform(request)
+                .andExpect( status().isOk() );
+//                .andExpect( content(), Matchers.hasSize(2)); //TODO: ARRUMAR VALIDACAO DO JSON
     }
 
 }

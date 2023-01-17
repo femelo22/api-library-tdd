@@ -11,4 +11,6 @@ public interface LoanService {
     Optional<Loan> getById(Long id);
 
     Loan update(Loan loan);
+
+    List<Loan> findAll();
 }
