@@ -7,6 +7,7 @@ import br.com.lfmelo.entities.Loan;
 import br.com.lfmelo.services.BookService;
 import br.com.lfmelo.services.LoanService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
