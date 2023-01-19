@@ -1,16 +1,23 @@
 package br.com.lfmelo.resources;
 
 import br.com.lfmelo.dtos.BookDTO;
+import br.com.lfmelo.dtos.LoanDTO;
 import br.com.lfmelo.entities.Book;
+import br.com.lfmelo.entities.Loan;
 import br.com.lfmelo.services.BookService;
+import br.com.lfmelo.services.LoanService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -22,6 +29,9 @@ public class BookController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private LoanService loanService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -65,5 +75,19 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public List<Book> findAllBooks() {
         return service.findAll();
+    }
+
+
+    @GetMapping("{id}/loans")
+    public Page<LoanDTO> loansByBook(@PathVariable Long id, Pageable pageable) {
+        Book book = service.getById(id);
+        Page<Loan> result = loanService.getLoansByBook(book, pageable);
+        List<LoanDTO> dtos = result.getContent()
+                .stream()
+                .map(loan -> {
+                    return new LoanDTO(loan);
+                }).collect(Collectors.toList());
+
+        return new PageImpl<LoanDTO>(dtos, pageable, result.getTotalElements());
     }
 }

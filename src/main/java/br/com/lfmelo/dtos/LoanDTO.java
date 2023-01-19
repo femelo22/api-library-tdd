@@ -1,5 +1,7 @@
 package br.com.lfmelo.dtos;
 
+import br.com.lfmelo.entities.Loan;
+
 public class LoanDTO {
 
     private String isbn;
@@ -13,6 +15,11 @@ public class LoanDTO {
     public LoanDTO(String isbn, String customer) {
         this.isbn = isbn;
         this.customer = customer;
+    }
+
+    public LoanDTO(Loan loan) {
+        this.isbn = loan.getBook().getIsbn();
+        this.customer = loan.getCustomer();
     }
 
     public String getIsbn() {

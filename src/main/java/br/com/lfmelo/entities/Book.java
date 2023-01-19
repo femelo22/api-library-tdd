@@ -1,9 +1,7 @@
 package br.com.lfmelo.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "TB_BOOK")
 public class Book {
@@ -17,6 +15,9 @@ public class Book {
     private String author;
 
     private String isbn;
+
+    @OneToMany
+    private List<Loan> loans;
 
     public Book() {
 
@@ -52,5 +53,13 @@ public class Book {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
     }
 }

@@ -1,11 +1,14 @@
 package br.com.lfmelo.services.impl;
 
+import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.entities.Loan;
 import br.com.lfmelo.repositories.LoanRepository;
 import br.com.lfmelo.resources.exception.BusinessException;
 import br.com.lfmelo.resources.exception.NotFoundException;
 import br.com.lfmelo.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +46,10 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public List<Loan> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<Loan> getLoansByBook(Book book, Pageable pageable) {
+        return null;
     }
 }
