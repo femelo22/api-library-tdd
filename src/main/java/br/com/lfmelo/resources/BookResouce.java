@@ -6,8 +6,11 @@ import br.com.lfmelo.entities.Book;
 import br.com.lfmelo.entities.Loan;
 import br.com.lfmelo.services.BookService;
 import br.com.lfmelo.services.LoanService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -23,7 +26,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
-public class BookController {
+@Api("Book API")
+public class BookResouce {
 
     @Autowired
     private BookService service;
@@ -36,6 +40,7 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Create a book")
     public BookDTO create(@RequestBody @Valid BookDTO dto) {
         Book entity = modelMapper.map(dto, Book.class);
         entity = service.save(entity);
@@ -43,6 +48,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("Obtains book details by ID")
     public BookDTO get(@PathVariable Long id) {
         Book book = service.getById(id);
         return modelMapper.map(book, BookDTO.class);
@@ -50,6 +56,10 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Delete a book by ID")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Book successfully deleted")
+    })
     public void deleteBook(@PathVariable Long id) {
         Book book = service.getById(id);
         service.delete(book);
@@ -57,6 +67,7 @@ public class BookController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation("Update a book")
     public Book updateBook(@PathVariable Long id, @RequestBody BookDTO dto) {
         return service.update(id, dto);
     }
@@ -74,6 +85,7 @@ public class BookController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation("Obtains all books")
     public List<Book> findAllBooks() {
         return service.findAll();
     }

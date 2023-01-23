@@ -15,17 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Arrays;
 
 import static br.com.lfmelo.factors.BookFactoryTest.*;
 import static org.hamcrest.Matchers.*;
@@ -35,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class) //cria um contexto de injeçao de dependencia
 @ActiveProfiles("test") //rodar no perfil de test
-@WebMvcTest(controllers = BookController.class) //Como temos mais que um controller, deixamos claro para ele rodar o BookController
+@WebMvcTest(controllers = BookResouce.class) //Como temos mais que um controller, deixamos claro para ele rodar o BookController
 @AutoConfigureMockMvc //O Spring configura um objeto pra fazermos as requisiçoes
 public class BookResourceTest {
 
