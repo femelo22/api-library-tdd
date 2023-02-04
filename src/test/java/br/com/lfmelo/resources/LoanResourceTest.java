@@ -57,6 +57,7 @@ public class LoanResourceTest {
         //cenario
         LoanDTO dto = buildLoanDTO();
         Loan loan = buildLoan();
+
         String json = new ObjectMapper().writeValueAsString(dto);
         BDDMockito.given( bookService.getBookByIsbn("123") ).willReturn(Optional.of(buildSavedBook()));
         BDDMockito.given( service.save(Mockito.any(Loan.class))).willReturn(loan);

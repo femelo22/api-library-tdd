@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static br.com.lfmelo.factors.BookFactoryTest.buildNewBook;
 import static br.com.lfmelo.factors.BookFactoryTest.buildSavedBook;
 import static br.com.lfmelo.factors.LoanFactoryTest.buildLoan;
+import static br.com.lfmelo.factors.LoanFactoryTest.buildLoanWithoutID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -33,11 +34,11 @@ public class LoanRepositoryTest {
 
         //cenario
         Book book = buildNewBook();
-        Loan loan = buildLoan();
-        loan.setBook(book);
         entityManager.persist(book);
-        entityManager.persist(loan);
 
+        Loan loan = buildLoanWithoutID();
+        loan.setBook(book);
+        entityManager.persist(loan);
 
         //execucao
         boolean exists = repository.existsByBookAndNotReturned(book);
