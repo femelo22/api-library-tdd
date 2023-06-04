@@ -65,7 +65,7 @@ public class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("Deve retornar false quando existir livro já cadastrado")
+    @DisplayName("Deve retornar false quando não existir livro já cadastrado por isbn")
     public void returnFalseWhenIsbnExists() {
         //cenario
         String isbn = "123";
